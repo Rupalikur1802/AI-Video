@@ -1,0 +1,50 @@
+{
+  "name": "sochitra",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "check": "tsc --noEmit",
+    "test": "tsx --test tests/*.test.ts",
+    "doctor": "tsx scripts/pipeline.ts doctor",
+    "sample": "tsx scripts/pipeline.ts fixture",
+    "generate": "tsx scripts/pipeline.ts generate",
+    "narrate": "tsx scripts/pipeline.ts narrate",
+    "render": "tsx scripts/pipeline.ts render",
+    "upload": "tsx scripts/pipeline.ts upload",
+    "preview": "remotion studio src/video/index.ts",
+    "dev": "next dev --webpack",
+    "build": "next build --webpack",
+    "start": "next start",
+    "db:setup": "tsx scripts/setup-database.ts",
+    "check:dashboard": "node scripts/check-dashboard.mjs"
+  },
+  "dependencies": {
+    "@better-auth/mongo-adapter": "^1.7.15",
+    "@remotion/bundler": "4.0.540",
+    "@remotion/cli": "4.0.540",
+    "@remotion/renderer": "4.0.540",
+    "@tailwindcss/postcss": "^4.3.3",
+    "better-auth": "^1.7.15",
+    "cloudinary": "^2.0.0",
+    "dotenv": "^16.4.0",
+    "lucide-react": "^1.66.0",
+    "mongodb": "^7.8.0",
+    "next": "^16.4.4",
+    "postcss": "^8.5.32",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "remotion": "4.0.540",
+    "server-only": "^0.0.1",
+    "tailwindcss": "^4.3.3",
+    "zod": "4.6.7"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.64.1",
+    "@types/node": "^22.0.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.7.0"
+  }
+}
