@@ -1,32 +1,31 @@
 /* ═══════════════════════════════════════════════════════════════════
-   bloom.css — Liquid-glass hero for the Bloom landing page
-   Loaded via layout.tsx; all selectors are scoped to .bloom-* or
-   @layer components so they never conflict with the Sochitra app.
+   bloom.css — Pixel-faithful Bloom template implementation
    ═══════════════════════════════════════════════════════════════════ */
 
-/* ── Google Fonts ──────────────────────────────────────────────────── */
+/* ── Fonts ─────────────────────────────────────────────────────────── */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;1,8..60,400;1,8..60,500&display=swap');
 
-/* ── CSS tokens (used only inside .bloom-root) ─────────────────────── */
+/* ── Tokens ─────────────────────────────────────────────────────────── */
 :root {
-  --bloom-display: 'Poppins', sans-serif;
-  --bloom-serif:   'Source Serif 4', Georgia, serif;
+  --bloom-sans:  'Poppins', system-ui, sans-serif;
+  --bloom-serif: 'Source Serif 4', Georgia, serif;
   --radius: 1rem;
 }
 
 /* ═══════════════════════════════════════════════════════════════════
-   LIQUID GLASS — @layer components (two tiers)
+   LIQUID GLASS  —  @layer components
+   Spec-exact ::before gradient border via mask-composite: exclude
    ═══════════════════════════════════════════════════════════════════ */
 @layer components {
 
-  /* ── Light tier ─────────────────────────────────────────────────── */
+  /* ── Light (4px blur) ─────────────────────────────────────────── */
   .liquid-glass {
-    background: rgba(255, 255, 255, 0.01);
+    background: rgba(255,255,255,0.01);
     background-blend-mode: luminosity;
     backdrop-filter: blur(4px);
     -webkit-backdrop-filter: blur(4px);
     border: none;
-    box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.10);
+    box-shadow: inset 0 1px 1px rgba(255,255,255,0.10);
     position: relative;
     overflow: hidden;
   }
@@ -38,12 +37,12 @@
     padding: 1.4px;
     background: linear-gradient(
       180deg,
-      rgba(255, 255, 255, 0.45)  0%,
-      rgba(255, 255, 255, 0.15) 20%,
-      transparent               40%,
-      transparent               60%,
-      rgba(255, 255, 255, 0.15) 80%,
-      rgba(255, 255, 255, 0.45) 100%
+      rgba(255,255,255,0.45)  0%,
+      rgba(255,255,255,0.15) 20%,
+      transparent            40%,
+      transparent            60%,
+      rgba(255,255,255,0.15) 80%,
+      rgba(255,255,255,0.45) 100%
     );
     -webkit-mask:
       linear-gradient(#fff 0 0) content-box,
@@ -51,19 +50,18 @@
     -webkit-mask-composite: xor;
     mask-composite: exclude;
     pointer-events: none;
-    z-index: 0;
   }
 
-  /* ── Heavy tier ─────────────────────────────────────────────────── */
+  /* ── Strong (50px blur) ───────────────────────────────────────── */
   .liquid-glass-strong {
-    background: rgba(255, 255, 255, 0.01);
+    background: rgba(255,255,255,0.01);
     background-blend-mode: luminosity;
     backdrop-filter: blur(50px);
     -webkit-backdrop-filter: blur(50px);
     border: none;
     box-shadow:
-      4px 4px 4px rgba(0, 0, 0, 0.05),
-      inset 0 1px 1px rgba(255, 255, 255, 0.15);
+      4px 4px 4px rgba(0,0,0,0.05),
+      inset 0 1px 1px rgba(255,255,255,0.15);
     position: relative;
     overflow: hidden;
   }
@@ -75,12 +73,12 @@
     padding: 1.4px;
     background: linear-gradient(
       180deg,
-      rgba(255, 255, 255, 0.50)  0%,
-      rgba(255, 255, 255, 0.20) 20%,
-      transparent               40%,
-      transparent               60%,
-      rgba(255, 255, 255, 0.20) 80%,
-      rgba(255, 255, 255, 0.50) 100%
+      rgba(255,255,255,0.50)  0%,
+      rgba(255,255,255,0.20) 20%,
+      transparent            40%,
+      transparent            60%,
+      rgba(255,255,255,0.20) 80%,
+      rgba(255,255,255,0.50) 100%
     );
     -webkit-mask:
       linear-gradient(#fff 0 0) content-box,
@@ -88,55 +86,38 @@
     -webkit-mask-composite: xor;
     mask-composite: exclude;
     pointer-events: none;
-    z-index: 0;
   }
 }
 
 /* ═══════════════════════════════════════════════════════════════════
-   ROOT & VIDEO BACKGROUND
+   ROOT
    ═══════════════════════════════════════════════════════════════════ */
 .bloom-root {
-  position: relative;
-  width: 100%;
+  font-family: var(--bloom-sans);
+  color: #fff;
   min-height: 100dvh;
   overflow: hidden;
-  font-family: var(--bloom-display);
-  color: #fff;
-}
-
-/* z-0, covers viewport */
-.bloom-video-bg {
-  position: fixed;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  z-index: 0;
-  pointer-events: none;
+  position: relative;
 }
 
 /* ═══════════════════════════════════════════════════════════════════
-   LEFT PANEL INNER  — absolute inset-4, rounded-3xl, flex-col
+   LEFT PANEL GLASS CARD
+   absolute inset-4 (lg:inset-6) rounded-3xl
+   flex-col so it fills the panel height
    ═══════════════════════════════════════════════════════════════════ */
-.bloom-panel-inner {
+.bloom-left-card {
   position: absolute;
-  inset: 1rem;          /* inset-4 */
-  border-radius: 1.5rem; /* rounded-3xl */
+  inset: 1rem;            /* inset-4 */
+  border-radius: 1.5rem;  /* rounded-3xl */
   display: flex;
   flex-direction: column;
   padding: 1.5rem 2rem;
-  gap: 0;
 }
-
 @media (min-width: 1024px) {
-  .bloom-panel-inner {
-    inset: 1.5rem; /* lg:inset-6 */
-  }
+  .bloom-left-card { inset: 1.5rem; } /* lg:inset-6 */
 }
 
-/* ═══════════════════════════════════════════════════════════════════
-   NAV
-   ═══════════════════════════════════════════════════════════════════ */
+/* ── Nav ─────────────────────────────────────────────────────────── */
 .bloom-nav {
   display: flex;
   align-items: center;
@@ -144,7 +125,6 @@
   flex-shrink: 0;
 }
 
-/* Logo + "bloom" text */
 .bloom-brand {
   display: flex;
   align-items: center;
@@ -152,38 +132,37 @@
   text-decoration: none;
 }
 
-/* semibold, 2xl, tracking-tighter, white */
-.bloom-brand-name {
-  font-family: var(--bloom-display);
-  font-weight: 600;
-  font-size: 1.5rem;   /* text-2xl */
-  letter-spacing: -0.05em; /* tracking-tighter */
+/* semibold 2xl tracking-tighter white */
+.bloom-brand-text {
+  font-family: var(--bloom-sans);
+  font-weight: 600;            /* semibold */
+  font-size: 1.5rem;           /* 2xl */
+  letter-spacing: -0.05em;     /* tracking-tighter */
   color: #fff;
   line-height: 1;
 }
 
-/* Menu pill — liquid-glass + rounded-full */
-.bloom-menu-pill {
-  display: flex;
+/* Menu — liquid-glass pill */
+.bloom-menu-btn {
+  display: inline-flex;
   align-items: center;
   gap: 0.4rem;
   border-radius: 9999px;
-  padding: 0.45rem 1rem;
-  font-family: var(--bloom-display);
+  padding: 0.4rem 1rem;
+  font-family: var(--bloom-sans);
   font-size: 0.8rem;
   font-weight: 500;
-  color: rgba(255, 255, 255, 0.80);
-  cursor: pointer;
+  color: rgba(255,255,255,0.80);
   background: transparent;
-  transition: transform 0.2s ease;
+  cursor: pointer;
+  transition: transform 0.2s;
+  /* liquid-glass class already provides backdrop + border */
 }
-.bloom-menu-pill:hover  { transform: scale(1.05); }
-.bloom-menu-pill:active { transform: scale(0.95); }
+.bloom-menu-btn:hover  { transform: scale(1.05); }
+.bloom-menu-btn:active { transform: scale(0.95); }
 
-/* ═══════════════════════════════════════════════════════════════════
-   HERO CENTRE  — flex-1, flex-col, items-center, justify-center
-   ═══════════════════════════════════════════════════════════════════ */
-.bloom-hero-center {
+/* ── Hero centre — flex-1 centered ──────────────────────────────── */
+.bloom-center {
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -191,13 +170,14 @@
   justify-content: center;
   text-align: center;
   gap: 1.6rem;
+  padding: 2rem 0;
 }
 
-/* h1: text-6xl lg:text-7xl, tracking-[-0.05em], font-weight 500, white */
+/* h1: text-6xl lg:text-7xl tracking-[-0.05em] weight 500 */
 .bloom-h1 {
-  font-family: var(--bloom-display);
+  font-family: var(--bloom-sans);
   font-weight: 500;
-  font-size: 3.75rem;   /* text-6xl */
+  font-size: 3.75rem;      /* text-6xl */
   line-height: 1.08;
   letter-spacing: -0.05em;
   color: #fff;
@@ -207,48 +187,46 @@
   .bloom-h1 { font-size: 4.5rem; } /* lg:text-7xl */
 }
 
-/* Italic serif accent inside h1 — font-serif text-white/80 */
+/* Italic serif accent — font-serif text-white/80 */
 .bloom-h1-em {
   font-family: var(--bloom-serif);
   font-style: italic;
   font-weight: 400;
-  color: rgba(255, 255, 255, 0.80);
+  color: rgba(255,255,255,0.80);
 }
 
-/* CTA button — liquid-glass-strong, rounded-full */
+/* CTA — liquid-glass-strong rounded-full */
 .bloom-cta {
   display: inline-flex;
   align-items: center;
-  gap: 0.8rem;
+  gap: 0.75rem;
   border-radius: 9999px;
   padding: 0.8rem 2rem;
-  font-family: var(--bloom-display);
+  font-family: var(--bloom-sans);
   font-weight: 500;
   font-size: 0.95rem;
   color: #fff;
-  cursor: pointer;
   background: transparent;
-  transition: transform 0.2s ease;
-  position: relative; /* needed for ::before to render properly */
-  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.2s;
 }
 .bloom-cta:hover  { transform: scale(1.05); }
 .bloom-cta:active { transform: scale(0.95); }
 
-/* w-7 h-7 rounded-full bg-white/15 — Download icon circle */
-.bloom-icon-circle {
+/* Download icon circle — w-7 h-7 rounded-full bg-white/15 */
+.bloom-dl-circle {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 1.75rem;  /* w-7 */
-  height: 1.75rem; /* h-7 */
+  width: 1.75rem;   /* w-7 */
+  height: 1.75rem;  /* h-7 */
   border-radius: 9999px;
-  background: rgba(255, 255, 255, 0.15);
+  background: rgba(255,255,255,0.15);
   flex-shrink: 0;
 }
 
-/* Pills row */
-.bloom-pills-row {
+/* Pills */
+.bloom-pills {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -256,94 +234,81 @@
   gap: 0.5rem;
 }
 
-/* Pill: liquid-glass, rounded-full, text-xs text-white/80 */
+/* pill — liquid-glass rounded-full text-xs text-white/80 */
 .bloom-pill {
   border-radius: 9999px;
   padding: 0.35rem 0.9rem;
-  font-size: 0.75rem; /* text-xs */
+  font-size: 0.75rem;   /* text-xs */
   font-weight: 500;
-  color: rgba(255, 255, 255, 0.80);
+  color: rgba(255,255,255,0.80);
   cursor: default;
-  transition: transform 0.2s ease;
-  position: relative;
-  overflow: hidden;
+  transition: transform 0.2s;
 }
 .bloom-pill:hover { transform: scale(1.05); }
 
-/* ═══════════════════════════════════════════════════════════════════
-   BOTTOM QUOTE
-   ═══════════════════════════════════════════════════════════════════ */
-.bloom-quote-section {
+/* ── Quote ───────────────────────────────────────────────────────── */
+.bloom-quote-block {
   flex-shrink: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 0.45rem;
-  padding-top: 1.25rem;
+  padding-top: 1rem;
   text-align: center;
 }
 
 /* text-xs tracking-widest uppercase text-white/50 */
 .bloom-eyebrow {
-  font-size: 0.75rem;
+  font-family: var(--bloom-sans);
+  font-size: 0.72rem;
   letter-spacing: 0.15em;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.50);
+  color: rgba(255,255,255,0.50);
   margin: 0;
 }
 
 .bloom-quote {
-  font-size: clamp(0.9rem, 1.5vw, 1.05rem);
-  line-height: 1.55;
+  font-size: clamp(0.88rem, 1.4vw, 1rem);
+  line-height: 1.6;
+  color: rgba(255,255,255,0.85);
   margin: 0;
-  color: rgba(255, 255, 255, 0.85);
-}
-
-.bloom-quote-display {
-  font-family: var(--bloom-display);
   font-style: normal;
 }
-
-/* Serif italic for quote emphasis */
-.bloom-quote-serif {
+.bloom-qd { font-family: var(--bloom-sans); }
+.bloom-qs {
   font-family: var(--bloom-serif);
   font-style: italic;
   font-weight: 400;
-  color: rgba(255, 255, 255, 0.80);
+  color: rgba(255,255,255,0.80);
 }
 
-/* Author row with horizontal rules */
-.bloom-author-row {
+.bloom-author {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  margin-top: 0.15rem;
+  gap: 0.7rem;
 }
-
 .bloom-rule {
-  flex: 1;
   height: 1px;
+  flex: 1;
   min-width: 2.5rem;
-  background: rgba(255, 255, 255, 0.22);
+  background: rgba(255,255,255,0.20);
 }
-
 .bloom-author-name {
-  font-size: 0.65rem;
+  font-size: 0.62rem;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.55);
+  color: rgba(255,255,255,0.55);
   white-space: nowrap;
 }
 
 /* ═══════════════════════════════════════════════════════════════════
-   RIGHT PANEL  — hidden mobile, lg:flex, w-[48%]
+   RIGHT PANEL  — hidden on mobile, lg:flex w-[48%]
    ═══════════════════════════════════════════════════════════════════ */
-.bloom-right-panel {
+.bloom-right {
   display: none;
 }
-
 @media (min-width: 1024px) {
-  .bloom-right-panel {
+  .bloom-right {
     display: flex;
     flex: 0 0 48%;
     flex-direction: column;
@@ -359,11 +324,11 @@
   gap: 0.75rem;
 }
 
-/* Social icons pill — liquid-glass, rounded-full */
+/* Social pill — liquid-glass rounded-full */
 .bloom-social-pill {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: 0.55rem;
+  gap: 0.45rem;
   border-radius: 9999px;
   padding: 0.45rem 0.9rem;
 }
@@ -371,36 +336,35 @@
 /* Social link: text-white hover:text-white/80 transition-colors */
 .bloom-social-link {
   display: inline-flex;
-  align-items: center;
-  justify-content: center;
   color: #fff;
   text-decoration: none;
-  transition: color 0.2s ease, transform 0.2s ease;
+  transition: color 0.2s, transform 0.2s;
 }
 .bloom-social-link:hover {
-  color: rgba(255, 255, 255, 0.80);
+  color: rgba(255,255,255,0.80);
   transform: scale(1.05);
 }
 
-/* w-8 h-8 rounded-full bg-white/10 */
-.bloom-icon-sm {
+/* Icon containers — w-8 h-8 rounded-full bg-white/10 flex items-center justify-center */
+.bloom-icon-wrap {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 2rem;   /* w-8 */
-  height: 2rem;  /* h-8 */
+  width: 2rem;    /* w-8 */
+  height: 2rem;   /* h-8 */
   border-radius: 9999px;
-  background: rgba(255, 255, 255, 0.10);
+  background: rgba(255,255,255,0.10);
 }
 
 .bloom-social-sep {
   width: 1px;
-  height: 0.9rem;
-  background: rgba(255, 255, 255, 0.18);
+  height: 0.85rem;
+  background: rgba(255,255,255,0.18);
+  margin-inline: 0.1rem;
 }
 
-/* Account button — liquid-glass, rounded-full */
-.bloom-account-btn {
+/* Account btn — liquid-glass */
+.bloom-acct-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -408,130 +372,113 @@
   height: 2.25rem;
   border-radius: 9999px;
   color: #fff;
-  cursor: pointer;
   background: transparent;
-  transition: transform 0.2s ease;
+  cursor: pointer;
+  transition: transform 0.2s;
 }
-.bloom-account-btn:hover  { transform: scale(1.05); }
-.bloom-account-btn:active { transform: scale(0.95); }
+.bloom-acct-btn:hover  { transform: scale(1.05); }
+.bloom-acct-btn:active { transform: scale(0.95); }
 
-/* ── Community card — w-56, liquid-glass ─────────────────────────── */
-.bloom-community-card {
-  width: 14rem; /* w-56 */
+/* ── Community card — w-56 ──────────────────────────────────────── */
+.bloom-community {
+  width: 14rem;  /* w-56 */
   border-radius: var(--radius);
-  padding: 1rem 1.2rem;
+  padding: 1rem 1.15rem;
 }
-
-.bloom-community-title {
-  font-family: var(--bloom-display);
+.bloom-comm-title {
+  font-family: var(--bloom-sans);
   font-weight: 500;
   font-size: 0.875rem;
   color: #fff;
   margin: 0 0 0.4rem;
 }
-
-.bloom-community-desc {
-  font-size: 0.725rem;
-  color: rgba(255, 255, 255, 0.60);
+.bloom-comm-desc {
+  font-size: 0.715rem;
+  color: rgba(255,255,255,0.60);
   line-height: 1.55;
   margin: 0;
 }
 
-/* ── Feature outer — mt-auto, liquid-glass, rounded-[2.5rem] ────── */
-.bloom-features-outer {
+/* ── Features outer — mt-auto liquid-glass rounded-[2.5rem] ─────── */
+.bloom-features {
   margin-top: auto;
-  border-radius: 2.5rem;
+  border-radius: 2.5rem;  /* rounded-[2.5rem] */
   padding: 1rem;
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
 }
 
-/* Two side-by-side cards row */
-.bloom-features-row {
+/* Row of two mini cards */
+.bloom-cards-row {
   display: flex;
   gap: 0.75rem;
 }
 
-/* Each mini card — liquid-glass, rounded-3xl */
-.bloom-feature-card {
+/* Mini card — liquid-glass rounded-3xl */
+.bloom-mini-card {
   flex: 1;
-  border-radius: 1.5rem; /* rounded-3xl */
+  border-radius: 1.5rem;  /* rounded-3xl */
   padding: 1rem 1rem 1.1rem;
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-  transition: transform 0.2s ease;
-  overflow: visible; /* let ::before clip properly */
+  transition: transform 0.2s;
 }
-.bloom-feature-card:hover { transform: scale(1.02); }
+.bloom-mini-card:hover { transform: scale(1.02); }
 
-/* w-8 h-8 rounded-full bg-white/10 — icon container */
-.bloom-icon-md {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 2rem;   /* w-8 */
-  height: 2rem;  /* h-8 */
-  border-radius: 9999px;
-  background: rgba(255, 255, 255, 0.10);
-  flex-shrink: 0;
-}
-
-.bloom-feature-title {
-  font-family: var(--bloom-display);
+.bloom-mini-title {
+  font-family: var(--bloom-sans);
   font-weight: 500;
   font-size: 0.82rem;
   color: #fff;
   margin: 0;
 }
-
-.bloom-feature-desc {
+.bloom-mini-desc {
   font-size: 0.7rem;
-  color: rgba(255, 255, 255, 0.60);
+  color: rgba(255,255,255,0.60);
   line-height: 1.5;
   margin: 0;
 }
 
-/* ── Flower card — liquid-glass ─────────────────────────────────── */
-.bloom-flower-card {
+/* Thumbnail card — liquid-glass */
+.bloom-thumb-card {
   border-radius: 1.5rem;
   padding: 0.85rem;
   display: flex;
   align-items: center;
   gap: 0.85rem;
-  transition: transform 0.2s ease;
+  transition: transform 0.2s;
 }
-.bloom-flower-card:hover { transform: scale(1.01); }
+.bloom-thumb-card:hover { transform: scale(1.01); }
 
-/* 96×64 thumbnail */
-.bloom-flower-thumb {
-  width: 6rem;   /* 96px */
-  height: 4rem;  /* 64px */
+/* 96×64 */
+.bloom-thumb {
+  width: 6rem;    /* 96px */
+  height: 4rem;   /* 64px */
   border-radius: 0.6rem;
   object-fit: cover;
   flex-shrink: 0;
 }
 
-.bloom-flower-text { flex: 1; min-width: 0; }
+.bloom-thumb-text { flex: 1; min-width: 0; }
 
-.bloom-flower-title {
-  font-family: var(--bloom-display);
+.bloom-thumb-title {
+  font-family: var(--bloom-sans);
   font-weight: 500;
   font-size: 0.82rem;
   color: #fff;
-  margin: 0 0 0.3rem;
+  margin: 0 0 0.28rem;
 }
-
-.bloom-flower-desc {
+.bloom-thumb-desc {
   font-size: 0.7rem;
-  color: rgba(255, 255, 255, 0.60);
+  color: rgba(255,255,255,0.60);
   line-height: 1.5;
   margin: 0;
 }
 
-/* + button — liquid-glass, rounded-full */
-.bloom-plus-btn {
+/* + button — liquid-glass rounded-full */
+.bloom-plus {
   width: 2rem;
   height: 2rem;
   border-radius: 9999px;
@@ -541,26 +488,29 @@
   font-size: 1.3rem;
   font-weight: 300;
   line-height: 1;
-  color: rgba(255, 255, 255, 0.80);
-  cursor: pointer;
+  color: rgba(255,255,255,0.80);
   background: transparent;
+  cursor: pointer;
   flex-shrink: 0;
-  transition: transform 0.2s ease;
+  transition: transform 0.2s;
 }
-.bloom-plus-btn:hover  { transform: scale(1.10); }
-.bloom-plus-btn:active { transform: scale(0.92); }
+.bloom-plus:hover  { transform: scale(1.10); }
+.bloom-plus:active { transform: scale(0.92); }
 
 /* ═══════════════════════════════════════════════════════════════════
-   MOBILE  — stack left panel full-width
+   MOBILE — left panel fills viewport, glass overlay uses inset-4
    ═══════════════════════════════════════════════════════════════════ */
 @media (max-width: 1023px) {
-  .bloom-panel-inner {
+  .bloom-left-container {
+    flex: 1 1 100% !important;
+    width: 100% !important;
+  }
+  .bloom-left-card {
     inset: 0.75rem;
-    border-radius: 1.25rem;
     padding: 1.25rem;
   }
   .bloom-h1 {
-    font-size: clamp(2.2rem, 8vw, 3rem);
+    font-size: clamp(2.1rem, 8vw, 3rem);
   }
 }
 
@@ -568,14 +518,9 @@
    REDUCED MOTION
    ═══════════════════════════════════════════════════════════════════ */
 @media (prefers-reduced-motion: reduce) {
-  .bloom-cta,
-  .bloom-menu-pill,
-  .bloom-pill,
-  .bloom-social-link,
-  .bloom-account-btn,
-  .bloom-feature-card,
-  .bloom-flower-card,
-  .bloom-plus-btn {
+  .bloom-menu-btn, .bloom-cta, .bloom-pill,
+  .bloom-social-link, .bloom-acct-btn,
+  .bloom-mini-card, .bloom-thumb-card, .bloom-plus {
     transition: none !important;
     transform: none !important;
   }
