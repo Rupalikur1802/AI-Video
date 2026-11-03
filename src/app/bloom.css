@@ -1,27 +1,25 @@
-/* ================================================================
-   bloom.css  –  Liquid-glass hero styles for the Bloom landing page
-   ================================================================ */
+/* ═══════════════════════════════════════════════════════════════════
+   bloom.css — Liquid-glass hero for the Bloom landing page
+   Loaded via layout.tsx; all selectors are scoped to .bloom-* or
+   @layer components so they never conflict with the Sochitra app.
+   ═══════════════════════════════════════════════════════════════════ */
 
-/* ── Google Fonts ──────────────────────────────────────────────── */
-@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Source+Serif+4:ital,wght@0,400;1,400;1,500&display=swap');
+/* ── Google Fonts ──────────────────────────────────────────────────── */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;1,8..60,400;1,8..60,500&display=swap');
 
-/* ── CSS custom properties ─────────────────────────────────────── */
+/* ── CSS tokens (used only inside .bloom-root) ─────────────────────── */
 :root {
+  --bloom-display: 'Poppins', sans-serif;
+  --bloom-serif:   'Source Serif 4', Georgia, serif;
   --radius: 1rem;
-  --bloom-font-display: 'Poppins', sans-serif;
-  --bloom-font-serif:   'Source Serif 4', Georgia, serif;
 }
 
-/* ── Typography helpers ────────────────────────────────────────── */
-.font-display { font-family: var(--bloom-font-display); }
-.font-serif   { font-family: var(--bloom-font-serif); }
-
-/* ================================================================
-   LIQUID GLASS  –  defined under @layer components
-   ================================================================ */
+/* ═══════════════════════════════════════════════════════════════════
+   LIQUID GLASS — @layer components (two tiers)
+   ═══════════════════════════════════════════════════════════════════ */
 @layer components {
 
-  /* ── Light tier ──────────────────────────────────────────────── */
+  /* ── Light tier ─────────────────────────────────────────────────── */
   .liquid-glass {
     background: rgba(255, 255, 255, 0.01);
     background-blend-mode: luminosity;
@@ -40,12 +38,12 @@
     padding: 1.4px;
     background: linear-gradient(
       180deg,
-      rgba(255,255,255,0.45)  0%,
-      rgba(255,255,255,0.15) 20%,
-      transparent            40%,
-      transparent            60%,
-      rgba(255,255,255,0.15) 80%,
-      rgba(255,255,255,0.45) 100%
+      rgba(255, 255, 255, 0.45)  0%,
+      rgba(255, 255, 255, 0.15) 20%,
+      transparent               40%,
+      transparent               60%,
+      rgba(255, 255, 255, 0.15) 80%,
+      rgba(255, 255, 255, 0.45) 100%
     );
     -webkit-mask:
       linear-gradient(#fff 0 0) content-box,
@@ -53,9 +51,10 @@
     -webkit-mask-composite: xor;
     mask-composite: exclude;
     pointer-events: none;
+    z-index: 0;
   }
 
-  /* ── Heavy tier ──────────────────────────────────────────────── */
+  /* ── Heavy tier ─────────────────────────────────────────────────── */
   .liquid-glass-strong {
     background: rgba(255, 255, 255, 0.01);
     background-blend-mode: luminosity;
@@ -76,12 +75,12 @@
     padding: 1.4px;
     background: linear-gradient(
       180deg,
-      rgba(255,255,255,0.50)  0%,
-      rgba(255,255,255,0.20) 20%,
-      transparent            40%,
-      transparent            60%,
-      rgba(255,255,255,0.20) 80%,
-      rgba(255,255,255,0.50) 100%
+      rgba(255, 255, 255, 0.50)  0%,
+      rgba(255, 255, 255, 0.20) 20%,
+      transparent               40%,
+      transparent               60%,
+      rgba(255, 255, 255, 0.20) 80%,
+      rgba(255, 255, 255, 0.50) 100%
     );
     -webkit-mask:
       linear-gradient(#fff 0 0) content-box,
@@ -89,61 +88,256 @@
     -webkit-mask-composite: xor;
     mask-composite: exclude;
     pointer-events: none;
+    z-index: 0;
   }
 }
 
-/* ================================================================
-   ROOT / VIDEO BACKGROUND
-   ================================================================ */
+/* ═══════════════════════════════════════════════════════════════════
+   ROOT & VIDEO BACKGROUND
+   ═══════════════════════════════════════════════════════════════════ */
 .bloom-root {
   position: relative;
   width: 100%;
   min-height: 100dvh;
   overflow: hidden;
-  font-family: var(--bloom-font-display);
+  font-family: var(--bloom-display);
   color: #fff;
 }
 
+/* z-0, covers viewport */
 .bloom-video-bg {
-  position: absolute;
+  position: fixed;
   inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
   z-index: 0;
+  pointer-events: none;
 }
 
-/* ================================================================
-   PANELS  –  full-screen flex row
-   ================================================================ */
-.bloom-panels {
-  position: relative;
-  z-index: 10;
+/* ═══════════════════════════════════════════════════════════════════
+   LEFT PANEL INNER  — absolute inset-4, rounded-3xl, flex-col
+   ═══════════════════════════════════════════════════════════════════ */
+.bloom-panel-inner {
+  position: absolute;
+  inset: 1rem;          /* inset-4 */
+  border-radius: 1.5rem; /* rounded-3xl */
   display: flex;
-  flex-direction: row;
-  min-height: 100dvh;
-}
-
-/* ── Left panel: 52% ─────────────────────────────────────────── */
-.bloom-left-panel {
-  flex: 0 0 52%;
-  display: flex;
-  padding: 1rem;
+  flex-direction: column;
+  padding: 1.5rem 2rem;
+  gap: 0;
 }
 
 @media (min-width: 1024px) {
-  .bloom-left-panel { padding: 1.5rem; }
+  .bloom-panel-inner {
+    inset: 1.5rem; /* lg:inset-6 */
+  }
 }
 
-.bloom-left-glass {
+/* ═══════════════════════════════════════════════════════════════════
+   NAV
+   ═══════════════════════════════════════════════════════════════════ */
+.bloom-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+
+/* Logo + "bloom" text */
+.bloom-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-decoration: none;
+}
+
+/* semibold, 2xl, tracking-tighter, white */
+.bloom-brand-name {
+  font-family: var(--bloom-display);
+  font-weight: 600;
+  font-size: 1.5rem;   /* text-2xl */
+  letter-spacing: -0.05em; /* tracking-tighter */
+  color: #fff;
+  line-height: 1;
+}
+
+/* Menu pill — liquid-glass + rounded-full */
+.bloom-menu-pill {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  border-radius: 9999px;
+  padding: 0.45rem 1rem;
+  font-family: var(--bloom-display);
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.80);
+  cursor: pointer;
+  background: transparent;
+  transition: transform 0.2s ease;
+}
+.bloom-menu-pill:hover  { transform: scale(1.05); }
+.bloom-menu-pill:active { transform: scale(0.95); }
+
+/* ═══════════════════════════════════════════════════════════════════
+   HERO CENTRE  — flex-1, flex-col, items-center, justify-center
+   ═══════════════════════════════════════════════════════════════════ */
+.bloom-hero-center {
   flex: 1;
   display: flex;
   flex-direction: column;
-  border-radius: 1.5rem;
-  padding: 1.5rem 2rem;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 1.6rem;
 }
 
-/* ── Right panel: 48%, hidden on mobile ─────────────────────── */
+/* h1: text-6xl lg:text-7xl, tracking-[-0.05em], font-weight 500, white */
+.bloom-h1 {
+  font-family: var(--bloom-display);
+  font-weight: 500;
+  font-size: 3.75rem;   /* text-6xl */
+  line-height: 1.08;
+  letter-spacing: -0.05em;
+  color: #fff;
+  margin: 0;
+}
+@media (min-width: 1024px) {
+  .bloom-h1 { font-size: 4.5rem; } /* lg:text-7xl */
+}
+
+/* Italic serif accent inside h1 — font-serif text-white/80 */
+.bloom-h1-em {
+  font-family: var(--bloom-serif);
+  font-style: italic;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.80);
+}
+
+/* CTA button — liquid-glass-strong, rounded-full */
+.bloom-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.8rem;
+  border-radius: 9999px;
+  padding: 0.8rem 2rem;
+  font-family: var(--bloom-display);
+  font-weight: 500;
+  font-size: 0.95rem;
+  color: #fff;
+  cursor: pointer;
+  background: transparent;
+  transition: transform 0.2s ease;
+  position: relative; /* needed for ::before to render properly */
+  overflow: hidden;
+}
+.bloom-cta:hover  { transform: scale(1.05); }
+.bloom-cta:active { transform: scale(0.95); }
+
+/* w-7 h-7 rounded-full bg-white/15 — Download icon circle */
+.bloom-icon-circle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.75rem;  /* w-7 */
+  height: 1.75rem; /* h-7 */
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.15);
+  flex-shrink: 0;
+}
+
+/* Pills row */
+.bloom-pills-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+/* Pill: liquid-glass, rounded-full, text-xs text-white/80 */
+.bloom-pill {
+  border-radius: 9999px;
+  padding: 0.35rem 0.9rem;
+  font-size: 0.75rem; /* text-xs */
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.80);
+  cursor: default;
+  transition: transform 0.2s ease;
+  position: relative;
+  overflow: hidden;
+}
+.bloom-pill:hover { transform: scale(1.05); }
+
+/* ═══════════════════════════════════════════════════════════════════
+   BOTTOM QUOTE
+   ═══════════════════════════════════════════════════════════════════ */
+.bloom-quote-section {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.45rem;
+  padding-top: 1.25rem;
+  text-align: center;
+}
+
+/* text-xs tracking-widest uppercase text-white/50 */
+.bloom-eyebrow {
+  font-size: 0.75rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.50);
+  margin: 0;
+}
+
+.bloom-quote {
+  font-size: clamp(0.9rem, 1.5vw, 1.05rem);
+  line-height: 1.55;
+  margin: 0;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.bloom-quote-display {
+  font-family: var(--bloom-display);
+  font-style: normal;
+}
+
+/* Serif italic for quote emphasis */
+.bloom-quote-serif {
+  font-family: var(--bloom-serif);
+  font-style: italic;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.80);
+}
+
+/* Author row with horizontal rules */
+.bloom-author-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 0.15rem;
+}
+
+.bloom-rule {
+  flex: 1;
+  height: 1px;
+  min-width: 2.5rem;
+  background: rgba(255, 255, 255, 0.22);
+}
+
+.bloom-author-name {
+  font-size: 0.65rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.55);
+  white-space: nowrap;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   RIGHT PANEL  — hidden mobile, lg:flex, w-[48%]
+   ═══════════════════════════════════════════════════════════════════ */
 .bloom-right-panel {
   display: none;
 }
@@ -158,223 +352,56 @@
   }
 }
 
-/* ================================================================
-   LEFT PANEL  –  NAVIGATION
-   ================================================================ */
-.bloom-nav {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.bloom-brand {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  text-decoration: none;
-}
-
-.bloom-brand-text {
-  font-family: var(--bloom-font-display);
-  font-weight: 600;
-  font-size: 1.25rem;
-  letter-spacing: -0.04em;
-  color: #fff;
-}
-
-.bloom-menu-btn {
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
-  border-radius: 9999px;
-  padding: 0.45rem 0.9rem;
-  font-family: var(--bloom-font-display);
-  font-size: 0.8rem;
-  font-weight: 500;
-  color: rgba(255,255,255,0.80);
-  cursor: pointer;
-  transition: transform 0.2s ease;
-  background: transparent;
-}
-.bloom-menu-btn:hover { transform: scale(1.05); }
-.bloom-menu-btn:active { transform: scale(0.95); }
-
-/* ================================================================
-   LEFT PANEL  –  HERO CENTRE
-   ================================================================ */
-.bloom-hero-center {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  gap: 1.5rem;
-  padding-block: 2rem;
-}
-
-.bloom-h1 {
-  font-family: var(--bloom-font-display);
-  font-weight: 500;
-  font-size: clamp(2.5rem, 6vw, 4.5rem);
-  line-height: 1.1;
-  letter-spacing: -0.05em;
-  color: #fff;
-  margin: 0;
-}
-
-/* Italic/serif emphasis inside headings */
-.bloom-h1 em,
-h1 em, h2 em, h3 em,
-.bloom-h1 i,
-h1 i, h2 i, h3 i,
-.italic {
-  font-family: var(--bloom-font-serif);
-  font-style: italic;
-  color: rgba(255,255,255,0.80);
-}
-
-/* CTA button */
-.bloom-cta {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.75rem;
-  border-radius: 9999px;
-  padding: 0.75rem 1.75rem;
-  font-family: var(--bloom-font-display);
-  font-weight: 500;
-  font-size: 0.95rem;
-  color: #fff;
-  cursor: pointer;
-  background: transparent;
-  transition: transform 0.2s ease;
-}
-.bloom-cta:hover  { transform: scale(1.05); }
-.bloom-cta:active { transform: scale(0.95); }
-
-/* Feature pills row */
-.bloom-pills {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-}
-
-.bloom-pill {
-  border-radius: 9999px;
-  padding: 0.35rem 0.9rem;
-  font-size: 0.7rem;
-  font-weight: 500;
-  color: rgba(255,255,255,0.80);
-  letter-spacing: 0.01em;
-  cursor: default;
-  transition: transform 0.2s ease;
-}
-.bloom-pill:hover { transform: scale(1.05); }
-
-/* ================================================================
-   LEFT PANEL  –  BOTTOM QUOTE
-   ================================================================ */
-.bloom-quote-block {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.4rem;
-  padding-top: 1rem;
-  text-align: center;
-}
-
-.bloom-quote-eyebrow {
-  font-size: 0.65rem;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: rgba(255,255,255,0.50);
-  margin: 0;
-}
-
-.bloom-quote {
-  font-size: clamp(0.9rem, 1.6vw, 1.1rem);
-  color: rgba(255,255,255,0.80);
-  margin: 0;
-  line-height: 1.5;
-  font-style: normal;
-}
-
-.bloom-author {
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
-  margin-top: 0.2rem;
-}
-
-.bloom-author-line {
-  flex: 1;
-  height: 1px;
-  min-width: 3rem;
-  background: rgba(255,255,255,0.25);
-}
-
-.bloom-author-name {
-  font-size: 0.65rem;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: rgba(255,255,255,0.60);
-  white-space: nowrap;
-}
-
-/* ================================================================
-   SHARED ICON BOX
-   ================================================================ */
-.bloom-icon-box {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 1.75rem;
-  height: 1.75rem;
-  border-radius: 9999px;
-  background: rgba(255,255,255,0.10);
-  flex-shrink: 0;
-}
-
-/* ================================================================
-   RIGHT PANEL  –  TOP BAR
-   ================================================================ */
-.bloom-right-topbar {
+/* ── Top bar ─────────────────────────────────────────────────────── */
+.bloom-topbar {
   display: flex;
   align-items: center;
   gap: 0.75rem;
 }
 
+/* Social icons pill — liquid-glass, rounded-full */
 .bloom-social-pill {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.55rem;
   border-radius: 9999px;
-  padding: 0.4rem 0.85rem;
+  padding: 0.45rem 0.9rem;
 }
 
+/* Social link: text-white hover:text-white/80 transition-colors */
 .bloom-social-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   color: #fff;
   text-decoration: none;
-  display: flex;
-  align-items: center;
   transition: color 0.2s ease, transform 0.2s ease;
 }
 .bloom-social-link:hover {
-  color: rgba(255,255,255,0.80);
+  color: rgba(255, 255, 255, 0.80);
   transform: scale(1.05);
 }
 
-.bloom-social-divider {
-  width: 1px;
-  height: 1rem;
-  background: rgba(255,255,255,0.20);
-  margin-inline: 0.1rem;
+/* w-8 h-8 rounded-full bg-white/10 */
+.bloom-icon-sm {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;   /* w-8 */
+  height: 2rem;  /* h-8 */
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.10);
 }
 
+.bloom-social-sep {
+  width: 1px;
+  height: 0.9rem;
+  background: rgba(255, 255, 255, 0.18);
+}
+
+/* Account button — liquid-glass, rounded-full */
 .bloom-account-btn {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
   width: 2.25rem;
@@ -388,34 +415,30 @@ h1 i, h2 i, h3 i,
 .bloom-account-btn:hover  { transform: scale(1.05); }
 .bloom-account-btn:active { transform: scale(0.95); }
 
-/* ================================================================
-   RIGHT PANEL  –  COMMUNITY CARD
-   ================================================================ */
+/* ── Community card — w-56, liquid-glass ─────────────────────────── */
 .bloom-community-card {
-  width: 14rem;
+  width: 14rem; /* w-56 */
   border-radius: var(--radius);
-  padding: 1rem 1.1rem;
+  padding: 1rem 1.2rem;
 }
 
 .bloom-community-title {
-  font-family: var(--bloom-font-display);
+  font-family: var(--bloom-display);
   font-weight: 500;
-  font-size: 0.85rem;
+  font-size: 0.875rem;
   color: #fff;
-  margin: 0 0 0.35rem;
+  margin: 0 0 0.4rem;
 }
 
 .bloom-community-desc {
-  font-size: 0.72rem;
-  color: rgba(255,255,255,0.60);
+  font-size: 0.725rem;
+  color: rgba(255, 255, 255, 0.60);
   line-height: 1.55;
   margin: 0;
 }
 
-/* ================================================================
-   RIGHT PANEL  –  FEATURE OUTER BOX
-   ================================================================ */
-.bloom-feature-outer {
+/* ── Feature outer — mt-auto, liquid-glass, rounded-[2.5rem] ────── */
+.bloom-features-outer {
   margin-top: auto;
   border-radius: 2.5rem;
   padding: 1rem;
@@ -424,39 +447,53 @@ h1 i, h2 i, h3 i,
   gap: 0.75rem;
 }
 
-/* Row with two side-by-side mini cards */
-.bloom-feature-row {
+/* Two side-by-side cards row */
+.bloom-features-row {
   display: flex;
   gap: 0.75rem;
 }
 
+/* Each mini card — liquid-glass, rounded-3xl */
 .bloom-feature-card {
   flex: 1;
-  border-radius: 1.5rem;
-  padding: 1rem;
+  border-radius: 1.5rem; /* rounded-3xl */
+  padding: 1rem 1rem 1.1rem;
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
   transition: transform 0.2s ease;
+  overflow: visible; /* let ::before clip properly */
 }
 .bloom-feature-card:hover { transform: scale(1.02); }
 
+/* w-8 h-8 rounded-full bg-white/10 — icon container */
+.bloom-icon-md {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;   /* w-8 */
+  height: 2rem;  /* h-8 */
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.10);
+  flex-shrink: 0;
+}
+
 .bloom-feature-title {
-  font-family: var(--bloom-font-display);
+  font-family: var(--bloom-display);
   font-weight: 500;
-  font-size: 0.8rem;
+  font-size: 0.82rem;
   color: #fff;
   margin: 0;
 }
 
 .bloom-feature-desc {
-  font-size: 0.68rem;
-  color: rgba(255,255,255,0.60);
+  font-size: 0.7rem;
+  color: rgba(255, 255, 255, 0.60);
   line-height: 1.5;
   margin: 0;
 }
 
-/* ── Bottom flower card ────────────────────────────────────────── */
+/* ── Flower card — liquid-glass ─────────────────────────────────── */
 .bloom-flower-card {
   border-radius: 1.5rem;
   padding: 0.85rem;
@@ -467,82 +504,79 @@ h1 i, h2 i, h3 i,
 }
 .bloom-flower-card:hover { transform: scale(1.01); }
 
+/* 96×64 thumbnail */
 .bloom-flower-thumb {
-  width: 6rem;
-  height: 4rem;
-  border-radius: 0.75rem;
+  width: 6rem;   /* 96px */
+  height: 4rem;  /* 64px */
+  border-radius: 0.6rem;
   object-fit: cover;
   flex-shrink: 0;
 }
 
-.bloom-flower-info {
-  flex: 1;
-  min-width: 0;
-}
+.bloom-flower-text { flex: 1; min-width: 0; }
 
 .bloom-flower-title {
-  font-family: var(--bloom-font-display);
+  font-family: var(--bloom-display);
   font-weight: 500;
-  font-size: 0.8rem;
+  font-size: 0.82rem;
   color: #fff;
-  margin: 0 0 0.25rem;
+  margin: 0 0 0.3rem;
 }
 
 .bloom-flower-desc {
-  font-size: 0.68rem;
-  color: rgba(255,255,255,0.60);
+  font-size: 0.7rem;
+  color: rgba(255, 255, 255, 0.60);
   line-height: 1.5;
   margin: 0;
 }
 
-.bloom-flower-plus {
+/* + button — liquid-glass, rounded-full */
+.bloom-plus-btn {
   width: 2rem;
   height: 2rem;
   border-radius: 9999px;
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.2rem;
+  font-size: 1.3rem;
   font-weight: 300;
-  color: rgba(255,255,255,0.80);
+  line-height: 1;
+  color: rgba(255, 255, 255, 0.80);
   cursor: pointer;
   background: transparent;
   flex-shrink: 0;
   transition: transform 0.2s ease;
-  line-height: 1;
 }
-.bloom-flower-plus:hover  { transform: scale(1.1); }
-.bloom-flower-plus:active { transform: scale(0.9); }
+.bloom-plus-btn:hover  { transform: scale(1.10); }
+.bloom-plus-btn:active { transform: scale(0.92); }
 
-/* ================================================================
-   ACCESSIBILITY  –  reduced motion
-   ================================================================ */
+/* ═══════════════════════════════════════════════════════════════════
+   MOBILE  — stack left panel full-width
+   ═══════════════════════════════════════════════════════════════════ */
+@media (max-width: 1023px) {
+  .bloom-panel-inner {
+    inset: 0.75rem;
+    border-radius: 1.25rem;
+    padding: 1.25rem;
+  }
+  .bloom-h1 {
+    font-size: clamp(2.2rem, 8vw, 3rem);
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   REDUCED MOTION
+   ═══════════════════════════════════════════════════════════════════ */
 @media (prefers-reduced-motion: reduce) {
   .bloom-cta,
-  .bloom-menu-btn,
+  .bloom-menu-pill,
   .bloom-pill,
   .bloom-social-link,
   .bloom-account-btn,
   .bloom-feature-card,
   .bloom-flower-card,
-  .bloom-flower-plus {
+  .bloom-plus-btn {
     transition: none !important;
-  }
-}
-
-/* ================================================================
-   RESPONSIVE  –  stack on mobile
-   ================================================================ */
-@media (max-width: 1023px) {
-  .bloom-left-panel {
-    flex: 1;
-    padding: 0.75rem;
-  }
-  .bloom-left-glass {
-    border-radius: 1.25rem;
-    padding: 1.25rem;
-  }
-  .bloom-h1 {
-    font-size: clamp(2rem, 8vw, 3rem);
+    transform: none !important;
   }
 }
