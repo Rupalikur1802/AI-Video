@@ -6,5 +6,9 @@ out/
 public/generated/
 *.tsbuildinfo
 .next/
+.video-bundle/
 test-results/
 playwright-report/
+
+.inngest/
+inngest.db*

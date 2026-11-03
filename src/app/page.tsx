@@ -1,3 +1,3 @@
-import {Homepage} from '../components/homepage';
+import {BloomHero} from '../components/bloom-hero';
 
-export default function Home(){return <Homepage/>;}
+export default function Home(){return <BloomHero/>;}

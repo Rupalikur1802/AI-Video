@@ -1,5 +1,9 @@
 # Sochitra — Development Roadmap
 
+3 November update: the four-step workspace, private source extraction, editable Gemini scripts, and conversational script proposals are built. See [implementation and remaining connections](Docs/UPLOAD_WORKSPACE.md). Document-to-video rendering and Instagram publishing are still pending.
+
+Later 3 November update: [local video generation](Docs/VIDEO_GENERATION.md) is now connected and verified in English and Hindi, including private MP4 playback/download. Hosted Vercel Sandbox verification/configuration and Instagram publishing remain pending.
+
 Date: 2 November 2026  
 Status: Implementation plan based on the approved V1 PRD  
 Related document: [Product Requirements Document](PRD.md)

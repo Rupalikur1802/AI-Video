@@ -1,5 +1,9 @@
 # Sochitra — Database Design
 
+Implemented source records and project workspace fields: [Upload workspace storage additions](UPLOAD_WORKSPACE.md#api-and-storage-additions).
+
+Jobs, cached narration, immutable ready revisions, private video assets, and processing project fields are now implemented: [video generation records](VIDEO_GENERATION.md#job-and-revision-records).
+
 Version: 1.0 draft · 2 November 2026  
 Database: MongoDB Atlas  
 Related: [Architecture](SYSTEM_ARCHITECTURE.md) · [API design](API_DESIGN.md)

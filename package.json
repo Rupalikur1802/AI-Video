@@ -13,21 +13,31 @@
     "render": "tsx scripts/pipeline.ts render",
     "upload": "tsx scripts/pipeline.ts upload",
     "preview": "remotion studio src/video/index.ts",
-    "dev": "next dev --webpack",
-    "build": "next build --webpack",
-    "start": "next start",
+    "dev": "next dev --webpack -p 3001",
+    "build": "npm run video:bundle && next build --webpack",
+    "start": "next start -p 3001",
     "db:setup": "tsx scripts/setup-database.ts",
-    "check:dashboard": "node scripts/check-dashboard.mjs"
+    "check:dashboard": "node scripts/check-dashboard.mjs",
+    "check:workspace": "node scripts/check-workspace.mjs",
+    "check:generation": "node scripts/check-generation-ui.mjs",
+    "check:video-jobs": "node --conditions=react-server --import tsx scripts/check-video-jobs.ts",
+    "check:script": "node --conditions=react-server --import tsx scripts/check-script-service.ts",
+    "video:bundle": "node scripts/bundle-video.mjs",
+    "workflow:dev": "inngest-cli dev --persist --host 127.0.0.1 --no-discovery -u http://localhost:3001/api/inngest"
   },
   "dependencies": {
     "@better-auth/mongo-adapter": "^1.7.15",
     "@remotion/bundler": "4.0.540",
     "@remotion/cli": "4.0.540",
     "@remotion/renderer": "4.0.540",
+    "@remotion/vercel": "^4.0.540",
     "@tailwindcss/postcss": "^4.3.3",
+    "@vercel/sandbox": "1.6.0",
     "better-auth": "^1.7.15",
     "cloudinary": "^2.0.0",
     "dotenv": "^16.4.0",
+    "fast-xml-parser": "^5.11.2",
+    "inngest": "^4.26.2",
     "lucide-react": "^1.66.0",
     "mongodb": "^7.8.0",
     "next": "^16.4.4",
@@ -37,6 +47,8 @@
     "remotion": "4.0.540",
     "server-only": "^0.0.1",
     "tailwindcss": "^4.3.3",
+    "unpdf": "^1.9.1",
+    "yauzl": "^3.4.0",
     "zod": "4.6.7"
   },
   "devDependencies": {
@@ -44,6 +56,8 @@
     "@types/node": "^22.0.0",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
+    "@types/yauzl": "^3.4.0",
+    "inngest-cli": "^1.49.0",
     "tsx": "^4.19.0",
     "typescript": "^5.7.0"
   }

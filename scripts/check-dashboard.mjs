@@ -23,6 +23,11 @@ try{
     await page.goto(`${base}/preview/dashboard`,{waitUntil:'networkidle'});
     await page.evaluate(()=>document.fonts.ready);
     assert.equal(await page.locator('.project-card').count(),6);
+    await page.getByRole('button',{name:'Upload material',exact:true}).click();
+    await page.getByRole('heading',{name:'Every video starts with a spark.'}).waitFor();
+    assert.equal(await page.getByRole('button',{name:'Upload material',exact:true}).getAttribute('aria-pressed'),'true');
+    await page.goto(`${base}/preview/dashboard`,{waitUntil:'networkidle'});
+
     assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=document.documentElement.clientWidth),true,`Overflow at ${width}`);
     assert.deepEqual(await page.evaluate(()=>[...document.images].filter(i=>i.complete&&!i.naturalWidth).map(i=>i.src)),[]);
     await page.screenshot({path:`out/dashboard/projects-${width}.png`,fullPage:true});
@@ -43,8 +48,10 @@ try{
     await page.getByRole('button',{name:'Create video',exact:true}).last().click();
     await page.getByLabel('Project title',{exact:true}).fill('Browser test draft');
     await page.getByRole('button',{name:'Create draft',exact:true}).click();
-    await page.getByRole('heading',{name:'Browser test draft',exact:true}).waitFor();
-    await page.getByRole('button',{name:'Actions for Browser test draft',exact:true}).click();
+    await page.getByRole('heading',{name:'Every video starts with a spark.'}).waitFor();
+    await page.locator('.workspace-breadcrumb').getByText('Browser test draft',{exact:true}).waitFor();
+    await page.goto(`${base}/preview/dashboard`,{waitUntil:'networkidle'});
+    await page.getByRole('button',{name:'Actions for Photosynthesis & Chloroplasts',exact:true}).click();
     await page.getByRole('menuitem',{name:'Rename',exact:true}).click();
     await page.getByLabel('Project title',{exact:true}).fill('Renamed preview draft');
     await page.getByRole('button',{name:'Save title',exact:true}).click();

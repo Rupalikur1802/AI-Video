@@ -1,5 +1,9 @@
 # Sochitra — API Design
 
+Implemented upload/workspace routes and current boundaries: [Material-to-video API additions](UPLOAD_WORKSPACE.md#api-and-storage-additions). Proposed routes elsewhere in this document are not automatically implemented.
+
+Implemented generation endpoint: `POST /api/projects/:id/generate`, body `{expectedVersion}`, header `Idempotency-Key`, returns the reconciled workspace (202 on first enqueue, 200 for an idempotent replay). Requires ownership/current script and blocks simultaneous generation or editing. Inngest serves signed hosted events at `/api/inngest` (local development mode uses the loopback service). See [generation implementation](VIDEO_GENERATION.md).
+
 Version: 1.0 draft · 2 November 2026  
 Basis: [System architecture](SYSTEM_ARCHITECTURE.md) · [Database design](DATABASE_DESIGN.md)
 

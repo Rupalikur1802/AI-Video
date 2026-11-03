@@ -3,6 +3,12 @@ import assert from 'node:assert/strict';
 import {isApprovedMember} from '../src/core/access';
 import {createProjectSchema,renameProjectSchema} from '../src/core/projects';
 
+test('draft creation supports an explicit upload starting point',()=>{
+  assert.equal(createProjectSchema.parse({title:'Source video',inputMode:'upload'}).inputMode,'upload');
+  assert.equal(createProjectSchema.parse({title:'Idea video'}).inputMode,'idea');
+  assert.equal(createProjectSchema.safeParse({title:'Bad mode',inputMode:'anything'}).success,false);
+});
+
 test('approval fails closed without an allowlist or verified email',()=>{
   const user={email:'owner@example.com',emailVerified:true};
   assert.equal(isApprovedMember(user,undefined),false);

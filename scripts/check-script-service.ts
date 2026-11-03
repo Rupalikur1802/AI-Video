@@ -1,0 +1,33 @@
+import assert from 'node:assert/strict';
+import {generateScript} from '../src/server/gemini';
+import {AppError} from '../src/server/errors';
+import {defaultDraft,type WorkspaceView} from '../src/core/workspace';
+const originalFetch=globalThis.fetch,originalKey=process.env.GEMINI_API_KEY;
+const scene={title:'Evaporation',narration:'Water evaporates in sunlight.',keywords:['Sunlight','Water'],visual:'steps',evidenceIds:['s1']};
+const plan={title:'The water cycle',scenes:[scene,scene]};
+const workspace:WorkspaceView={id:'test',title:'Test',version:1,draft:{...defaultDraft,mode:'upload'},source:{id:'source',name:'lesson.pdf',kind:'pdf',count:1,warnings:[],units:[{id:'page-1',label:'Page 1',text:'Water evaporates in sunlight.\nClouds form when vapor cools.'}]},script:null,scriptStale:false,revisions:[],generationAvailable:false};
+const reply=(value:unknown,finishReason='STOP')=>Response.json({candidates:[{finishReason,content:{parts:[{text:JSON.stringify(value)}]}}]});
+try{
+ process.env.GEMINI_API_KEY='test-only-not-a-real-key';
+ let requestBody='';globalThis.fetch=async(_url,init)=>{requestBody=String(init?.body);return reply(plan);};
+ const result=await generateScript(workspace);assert.equal(result.title,plan.title);assert.deepEqual(result.scenes[0].sourceRefs,['page-1']);assert.equal(result.scenes[0].evidence[0].quote,workspace.source!.units[0].text);
+ assert.match(requestBody,/untrusted DATA/);assert.match(requestBody,/page-1/);
+ const config=JSON.parse(requestBody).generationConfig;assert.equal(config.responseJsonSchema.properties.scenes.items.properties.evidenceIds.items.enum[0],'s1');
+ assert.equal(config.responseJsonSchema.properties.scenes.items.properties.sourceRefs,undefined);
+ globalThis.fetch=async()=>reply({...plan,scenes:[{...scene,evidenceIds:['invented-source']},scene]});
+ await assert.rejects(generateScript(workspace),e=>e instanceof AppError&&e.code==='INVALID_SOURCE_REFERENCE');
+ globalThis.fetch=async()=>reply({title:'Missing scenes'});
+ await assert.rejects(generateScript(workspace),e=>e instanceof AppError&&e.code==='INVALID_SCRIPT');
+ globalThis.fetch=async()=>reply(plan,'MAX_TOKENS');
+ await assert.rejects(generateScript(workspace),e=>e instanceof AppError&&e.code==='SCRIPT_INCOMPLETE');
+ globalThis.fetch=async()=>Response.json({promptFeedback:{blockReason:'SAFETY'}});
+ await assert.rejects(generateScript(workspace),e=>e instanceof AppError&&e.code==='SCRIPT_UNAVAILABLE');
+ globalThis.fetch=async()=>Response.json({candidates:[{finishReason:'STOP',content:{parts:[{thought:true,text:'Not part of the script JSON'},{text:JSON.stringify(plan)}]}}]});
+ assert.equal((await generateScript(workspace)).title,plan.title);
+ globalThis.fetch=async()=>Response.json({privateProviderMessage:'must not leak'},{status:429});
+ await assert.rejects(generateScript(workspace),e=>e instanceof AppError&&e.code==='PROVIDER_RATE_LIMIT'&&!e.message.includes('privateProviderMessage'));
+ await assert.rejects(generateScript({...workspace,source:null}),e=>e instanceof AppError&&e.code==='SOURCE_REQUIRED');
+ await assert.rejects(generateScript({...workspace,draft:{...workspace.draft,focusMode:'focus',focus:''}}),e=>e instanceof AppError&&e.code==='FOCUS_REQUIRED');
+ await assert.rejects(generateScript({...workspace,source:{...workspace.source!,units:[]}}),e=>e instanceof AppError&&e.code==='SOURCE_EMPTY');
+ console.log('Script service: schema-constrained output, exact server-sourced quotations, unknown reference rejection, malformed/incomplete/blocked responses, thought filtering, sanitized provider errors, and source/focus validation passed. No provider requests made.');
+}finally{globalThis.fetch=originalFetch;if(originalKey===undefined)delete process.env.GEMINI_API_KEY;else process.env.GEMINI_API_KEY=originalKey;}

@@ -2,6 +2,8 @@
 
 Date: 3 November 2026
 
+Local sign-in uses **http://localhost:3001/login**, matching `BETTER_AUTH_URL` and the registered Google callback `http://localhost:3001/api/auth/callback/google`. `npm run dev` now uses port 3001. Local login requests on another address redirect to the configured address before starting OAuth, so cookies are not split between `127.0.0.1` and `localhost`. Stop an older Sochitra server on this port before starting a new one.
+
 ## Design references
 
 Stitch project `10281477488436873845`:

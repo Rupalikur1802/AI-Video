@@ -1,5 +1,7 @@
 # Product Requirements Document: Sochitra
 
+**3 November implementation addendum:** idea input now also supports one PDF/PPTX/TXT source, extraction review, English/Hindi output, and source-referenced scripts in the existing four-step flow. See [upload workspace scope and status](UPLOAD_WORKSPACE.md); this supersedes earlier exclusions of document input. Hosted rendering and Instagram remain pending integration.
+
 Version: 1.4 draft for review  
 Date: 2 November 2026  
 Product name: Sochitra  

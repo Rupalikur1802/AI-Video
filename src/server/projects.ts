@@ -4,8 +4,9 @@ import {ObjectId, MongoServerError} from 'mongodb';
 import {getMongo} from './db';
 import {AppError} from './errors';
 import {createProjectSchema, type ProjectView} from '../core/projects';
+import {defaultDraft,type WorkspaceDraft} from '../core/workspace';
 
-type ProjectRecord={_id:ObjectId;ownerId:string;title:string;brief:{topic:string;notes:string;language:'en'|'hi';audience:string;targetSeconds:30|60|90};version:number;state:ProjectView['state'];createdAt:Date;updatedAt:Date;requestKey:string;requestHash:string;currentReadyRevisionId?:ObjectId;activeJobId?:ObjectId;deletedAt?:Date;schemaVersion:number};
+type ProjectRecord={_id:ObjectId;ownerId:string;title:string;brief:{topic:string;notes:string;language:'en'|'hi';audience:string;targetSeconds:30|60|90};workspaceDraft?:WorkspaceDraft;stage?:string;durationSeconds?:number;error?:string;version:number;state:ProjectView['state'];createdAt:Date;updatedAt:Date;requestKey:string;requestHash:string;currentReadyRevisionId?:ObjectId;activeJobId?:ObjectId;deletedAt?:Date;schemaVersion:number};
 let indexes:Promise<unknown>|undefined;
 async function collection(){
   const col=getMongo().db.collection<ProjectRecord>('projects');
@@ -13,7 +14,7 @@ async function collection(){
   await indexes;return col;
 }
 function objectId(id:string){if(!/^[a-f\d]{24}$/i.test(id))throw new AppError(404,'NOT_FOUND','Project not found.');return new ObjectId(id);}
-function view(p:ProjectRecord):ProjectView{return {id:p._id.toHexString(),title:p.title,language:p.brief.language,targetSeconds:p.brief.targetSeconds,state:p.state,updatedAt:p.updatedAt.toISOString(),version:p.version};}
+function view(p:ProjectRecord):ProjectView{return {id:p._id.toHexString(),title:p.title,language:p.brief.language,targetSeconds:p.brief.targetSeconds,state:p.state,stage:p.stage,durationSeconds:p.durationSeconds,error:p.error,previousReady:p.state==='updating'&&!!p.currentReadyRevisionId,updatedAt:p.updatedAt.toISOString(),version:p.version};}
 export async function listProjects(ownerId:string){
   const rows=await (await collection()).find({ownerId,deletedAt:{$exists:false}}).sort({updatedAt:-1,_id:-1}).limit(100).toArray();
   return rows.map(view);
@@ -25,7 +26,7 @@ export async function createProject(ownerId:string,input:unknown,requestKey:stri
   const existing=await col.findOne({ownerId,requestKey});
   if(existing){if(existing.requestHash!==requestHash)throw new AppError(409,'IDEMPOTENCY_CONFLICT','This request was already used for different content.');return view(existing);}
   const now=new Date();
-  const record:ProjectRecord={_id:new ObjectId(),ownerId,title:data.title,brief:{topic:data.topic,notes:'',language:data.language,audience:'Beginners',targetSeconds:data.targetSeconds},version:1,state:'draft',createdAt:now,updatedAt:now,requestKey,requestHash,schemaVersion:1};
+  const record:ProjectRecord={_id:new ObjectId(),ownerId,title:data.title,workspaceDraft:{...defaultDraft,mode:data.inputMode,topic:data.topic,language:data.language,targetSeconds:data.targetSeconds},brief:{topic:data.topic,notes:'',language:data.language,audience:'Beginners',targetSeconds:data.targetSeconds},version:1,state:'draft',createdAt:now,updatedAt:now,requestKey,requestHash,schemaVersion:1};
   try{await col.insertOne(record);}catch(error){if(error instanceof MongoServerError&&error.code===11000){const other=await col.findOne({ownerId,requestKey});if(other&&other.requestHash===requestHash)return view(other);}throw error;}
   return view(record);
 }
